@@ -6,6 +6,7 @@ public class InventoryItem : MonoBehaviour
 {
     public string itemName;
     public Sprite itemImage;
+    public ItemSO scriptableObjectItem;
 
     //script to hold information about items
     //disables item when picked up

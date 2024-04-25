@@ -6,11 +6,13 @@ public class Hud : MonoBehaviour
 {
     public Inventory inventory;
     public Transform hotbar;
+    public Color selectedColour, nonSelectedColour;
 
     //subscribe to events in Inventory class
     void Start()
     {
         inventory.ItemAdded += InventoryItemAdded;
+        inventory.ItemSelect += InventoryItemSelect;
         //inventory.ItemRemoved += InventoryItemRemoved;    
     }
 
@@ -36,6 +38,10 @@ public class Hud : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void InventoryItemSelect(InventoryItem item){
+        Debug.Log("selet");
     }
 
     /*
