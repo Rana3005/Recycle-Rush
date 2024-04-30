@@ -14,6 +14,7 @@ public class ItemSO : ScriptableObject
 }
 
 public enum ItemType {
+    None,
     LiftTech,
     Key,
     GunEMP

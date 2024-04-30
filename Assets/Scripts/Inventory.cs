@@ -15,7 +15,9 @@ public class Inventory : MonoBehaviour
 
     //list to hold all items
     List<InventoryItem> items = new List<InventoryItem>();
-    private int selectedSlotIndex = 0;
+    
+    public int selectedSlotIndex = -1;
+    public InventoryItem currentItem;
 
     public void AddItem(InventoryItem item){
         if(items.Contains(item)){
@@ -26,7 +28,9 @@ public class Inventory : MonoBehaviour
         item.onPickup();
 
         ItemAdded?.Invoke(item);
-        if(items.Count == 1){ChangeItem(1);}
+        if(items.Count == 1){
+            ChangeItem(1);
+        }
     }
     
     public void UseItem(InventoryItem item){
@@ -43,7 +47,10 @@ public class Inventory : MonoBehaviour
         }
 
         selectedSlotIndex = itemIndex;
-        NewItemSelect();
+        currentItem = items[itemIndex];
+
+        NewItemSelect(itemIndex);                   //Updates item gameobject
+        ItemSelect?.Invoke(items[itemIndex]);       //Updates HUD inventory
     }
 
     public void RemoveItem(InventoryItem inventoryItem)
@@ -53,13 +60,14 @@ public class Inventory : MonoBehaviour
         ItemRemoved?.Invoke(inventoryItem);
     }
 
-    private void NewItemSelect(){
+    private void NewItemSelect(int selectedIndex){
         if(items.Count == 0){ return; }
-
+        
+        //disables all inventory items and enables selected inventory item
         foreach(InventoryItem item in items){
             item.gameObject.SetActive(false);
         }
 
-        items[selectedSlotIndex].gameObject.SetActive(true);        
+        items[selectedIndex].gameObject.SetActive(true);        
     }
 }

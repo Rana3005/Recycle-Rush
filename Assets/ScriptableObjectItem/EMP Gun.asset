@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45cd169abc62444aa23a5eef6134881, type: 3}
   m_Name: EMP Gun
   m_EditorClassIdentifier: 
-  cooldown: 3
-  item_type: 2
+  cooldown: 1.5
+  item_type: 3
   stackable: 0

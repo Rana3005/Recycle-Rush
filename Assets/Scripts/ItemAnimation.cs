@@ -31,7 +31,7 @@ public class ItemAnimation : MonoBehaviour
             {
                 Vector3 pos = transform.position;
                 //new y position
-                float newPosY = Mathf.Sin(Time.time * floatSpeed);
+                float newPosY = Mathf.Sin(Time.time * floatSpeed * pos.y);
                 //new position set to object
                 transform.position = new Vector3(pos.x, newPosY * height, pos.z);
             }

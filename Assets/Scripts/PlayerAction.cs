@@ -9,42 +9,79 @@ public class PlayerAction : MonoBehaviour
     [SerializeField] private Transform holdPosition;
     bool fire = false;
 
+    public Inventory inventory;
+    private ItemType currentItemType;
+    private InventoryItem currentItem;
+
+    private float fireRate = -1;
+    private float nextFire = 0.0f;
+
+    void Start(){
+        inventory.ItemSelect += ItemSelected;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire1")){
-            if(heldObject == null){
-                RaycastHit hit;
-                //selects object and turns off gravity of object
-                if (Physics.Raycast(transform.position, transform.forward, out hit, 10.0f, layerMask)){
-                    heldObject = hit.collider.gameObject;
-                    heldObject.GetComponent<Rigidbody>().useGravity = false;
+        if(currentItemType == ItemType.None){
+            return;
+        }
+
+        if(currentItemType == ItemType.LiftTech){
+            if(Input.GetButtonDown("Fire1")){
+                if(heldObject == null){
+                    RaycastHit hit;
+                    //selects object and turns off gravity of object
+                    if (Physics.Raycast(transform.position, transform.forward, out hit, 10.0f, layerMask)){
+                        heldObject = hit.collider.gameObject;
+                        heldObject.GetComponent<Rigidbody>().useGravity = false;
+                    }
+                } 
+                Debug.Log("fire1");  
+
+                currentItem.gameObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            }
+
+            if(Input.GetButtonUp("Fire1")){
+                //Drop object
+                if(heldObject != null){
+                    heldObject.GetComponent<Rigidbody>().useGravity = true;
+
+                    heldObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    heldObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                    heldObject.GetComponent<Rigidbody>().ResetInertiaTensor();
+
+                    heldObject = null;
                 }
-            } 
-            Debug.Log("fire1");           
-        }
 
-        if(Input.GetButtonUp("Fire1")){
-            //Drop object
-            if(heldObject != null){
-                heldObject.GetComponent<Rigidbody>().useGravity = true;
+                currentItem.gameObject.GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+            }
 
-                heldObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                heldObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                heldObject.GetComponent<Rigidbody>().ResetInertiaTensor();
-
-                heldObject = null;
+            if(Input.GetButtonUp("Fire2")){
+                if (heldObject != null){
+                    fire = true;
+                }
+                Debug.Log("fire2"); 
             }
         }
 
-        if(Input.GetButtonUp("Fire2")){
-            if (heldObject != null){
-                fire = true;
+        if(currentItemType == ItemType.Key){
+            if(Input.GetKeyDown(KeyCode.F)){
+                Debug.Log("Using Key");
+
             }
-            Debug.Log("fire2"); 
         }
+
+        if(currentItemType == ItemType.GunEMP){
+            if (Input.GetButton("Fire1") && Time.time > nextFire){
+                nextFire = Time.time + fireRate;
+                Fire();
+            }
+        }
+
     }
 
+    
     void FixedUpdate(){
         if (heldObject != null){
             //moving object being held based on hold position
@@ -60,5 +97,30 @@ public class PlayerAction : MonoBehaviour
                 heldObject = null;
             }
         }
+    }
+
+    private void ItemSelected(InventoryItem item){
+        currentItemType = item.scriptableObjectItem.item_type;
+        currentItem = item;
+
+        if(fireRate == -1 && currentItemType == ItemType.GunEMP){
+            fireRate = item.scriptableObjectItem.cooldown;
+        }
+    }
+
+    void Fire(){
+        RaycastHit hit;
+
+        //draws a line from the camera in forward direction, what it hits is returned 
+        if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity)){
+            Debug.Log("Hit: " + hit.collider.gameObject.name);
+        }
+
+        /*
+        if (hit.transform.tag == "target"){
+            Destroy(hit.transform.gameObject);
+        }
+
+        */
     }
 }

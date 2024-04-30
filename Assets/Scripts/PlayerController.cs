@@ -5,16 +5,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     CharacterController characterController;
-    public float speed = 12;
+
+    [Header("Movement")]
+    public float speed = 6;
+    private float sprint = 2.5f;
+    private float currentSpeed;
     public float gravity = -10;
     public float jumpForce = 3f;
     Vector3 velocity;
     
-
     bool isGrounded;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
     public LayerMask groundMask;
+
 
     void Start()
     {
@@ -37,9 +41,17 @@ public class PlayerController : MonoBehaviour
         //moving from left to right
         float lateralMoveInput = Input.GetAxis("Horizontal");
 
+        //sprint speed movement
+        if(Input.GetKey(KeyCode.LeftShift) && isGrounded){
+            currentSpeed = speed + sprint;
+        }
+        else {
+            currentSpeed = speed;
+        }
+
         //player moves in the direction relative to the camera direction, not global forward or right directions
         Vector3 movement = transform.right * lateralMoveInput + transform.forward * forwardMoveInput;
-        characterController.Move(movement * speed * Time.deltaTime);
+        characterController.Move(movement * currentSpeed * Time.deltaTime);
 
         //apply jump
         if (Input.GetButton("Jump") && isGrounded){

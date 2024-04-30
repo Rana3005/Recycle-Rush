@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Key1
   m_EditorClassIdentifier: 
   cooldown: 0
-  item_type: 1
+  item_type: 2
   stackable: 0

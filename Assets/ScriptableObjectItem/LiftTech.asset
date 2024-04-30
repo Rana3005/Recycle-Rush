@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LiftTech
   m_EditorClassIdentifier: 
   cooldown: 0
-  item_type: 0
+  item_type: 1
   stackable: 0

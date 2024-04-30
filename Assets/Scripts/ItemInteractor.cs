@@ -63,8 +63,8 @@ public class ItemInteractor : MonoBehaviour
                 inventoryItem.localRotation = Quaternion.Euler(0.1f, -75, 150);
                 break;
             case ItemType.GunEMP:
-                inventoryItem.localPosition = new Vector3(0,0,0);
-                inventoryItem.localRotation = Quaternion.Euler(0,0,0);
+                inventoryItem.localPosition = new Vector3(-0.06f,-0.06f,-0.09f);
+                inventoryItem.localRotation = Quaternion.Euler(-4.25f,14.25f,0);
                 break;
             default:
                 Debug.Log("Unspported Item");
