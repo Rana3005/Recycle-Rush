@@ -17,7 +17,7 @@ public class Hud : MonoBehaviour
     {
         inventory.ItemAdded += InventoryItemAdded;
         inventory.ItemSelect += InventoryItemSelect;
-        //inventory.ItemRemoved += InventoryItemRemoved;
+        inventory.ItemRemoved += InventoryItemRemoved;
  
         //Gets all Border gameobjects by tag and then sorts in order by name
         slotBorder = GameObject.FindGameObjectsWithTag("SlotBorder");
@@ -36,12 +36,9 @@ public class Hud : MonoBehaviour
         
             Image image = itemImage.GetComponent<Image>();
 
-            //InventoryItemClickable button = slot.GetComponent<InventoryItemClickable>();
-
             if(!image.enabled){
                 image.enabled = true;
                 image.sprite = item.itemImage;
-                //button.item = item;
 
                 break;
             }
@@ -57,30 +54,47 @@ public class Hud : MonoBehaviour
         slotBorder[inventory.selectedSlotIndex].GetComponent<Image>().color = selectedColour;
     }
 
-    /*
+    private void ResetItemSelect(){
+        foreach(GameObject border in slotBorder){
+            border.GetComponent<Image>().color = nonSelectedColour;
+        }
+    }
+
+    
     private void InventoryItemRemoved(InventoryItem item){
-        Debug.Log("Remove Item");
-        Transform panel = transform.Find("InventoryHud");
+        Debug.Log("Items: " + inventory.getItemListCount());
+        if(inventory.getItemListCount() == 0){
+            Debug.Log("No Items");
+            ResetItemSelect();
+            foreach (Transform slot in hotbar.transform){   
+                //GameObject itemImage = slot.Find("Border/ItemImage").gameObject;
+                GameObject itemImage = slot.GetComponentInChildren<EmptyPlaceholder>().gameObject;
+                Image image = itemImage.GetComponent<Image>();
 
-        foreach (Transform slot in panel){
-            Image image = slot.GetComponent<Image>();
-            //InventoryItemClickable button = slot.GetComponent<InventoryItemClickable>();
-
-            if (button.item.itemName == item.itemName){
-                image.enabled = false;
-                image.sprite = null;
-                //button.item = null;
-
-                break;
+                if(image.enabled){
+                    image.enabled = false;          
+                } else{
+                    break;
+                }
             }
-            /*
-            if(!image.enabled){
-                image.enabled = true;
-                image.sprite = item.itemImage;
-                button.item = item;
+            return;
+        }
 
-                break;
+        int itemIndex = 0;
+        foreach (Transform slot in hotbar.transform){   
+            //GameObject itemImage = slot.Find("Border/ItemImage").gameObject;
+            GameObject itemImage = slot.GetComponentInChildren<EmptyPlaceholder>().gameObject;
+            Image image = itemImage.GetComponent<Image>();
+
+            if(itemIndex < inventory.getItemListCount()){
+                image.sprite = inventory.getList()[itemIndex].itemImage;
+                itemIndex++;
+            }
+            else {
+                image.enabled = false;
             }
         }
-    }*/
+
+        inventory.ChangeItem(inventory.getItemListCount());
+    }
 }

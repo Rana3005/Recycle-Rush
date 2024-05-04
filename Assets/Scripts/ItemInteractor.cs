@@ -34,20 +34,21 @@ public class ItemInteractor : MonoBehaviour
 
     //script handles action when player collects item
     private void OnControllerColliderHit(ControllerColliderHit hit){
-        InventoryItem item = hit.gameObject.GetComponent<InventoryItem>();
-        ItemAnimation itemAnimation  = hit.gameObject.GetComponent<ItemAnimation>();
+        if(inventory.getItemListCount() < 7){
+            InventoryItem item = hit.gameObject.GetComponent<InventoryItem>();
+            ItemAnimation itemAnimation  = hit.gameObject.GetComponent<ItemAnimation>();
+            
+            if(item != null){
+                //turn off animation
+                itemAnimation.enabled = false;
 
-        if(itemAnimation != null){
-            //turn off animation
-            itemAnimation.enabled = false;
-        }
-        if(item != null){
-            //Make object a child of itemPosition so it's in HUDs
-            //hit.transform.SetParent(itemPosition.transform);
-            hit.transform.parent = itemPosition.transform;
-            ChangeItemPositionAndRotation(hit.transform, item.scriptableObjectItem.item_type);
+                //Make object a child of itemPosition so it's in HUDs
+                //hit.transform.SetParent(itemPosition.transform);
+                hit.transform.parent = itemPosition.transform;
+                ChangeItemPositionAndRotation(hit.transform, item.scriptableObjectItem.item_type);
 
-            inventory.AddItem(item);
+                inventory.AddItem(item);
+            }
         }
     }
 

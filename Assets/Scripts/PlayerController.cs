@@ -8,13 +8,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     public float speed = 6;
-    private float sprint = 2.5f;
+    public float sprint = 2.5f;
     private float currentSpeed;
     public float gravity = -10;
     public float jumpForce = 3f;
     Vector3 velocity;
     
-    bool isGrounded;
+    private bool isGrounded;
+    private bool isSprinting;
+
     public Transform groundCheck;
     public float groundDistance = 0.2f;
     public LayerMask groundMask;
@@ -42,22 +44,28 @@ public class PlayerController : MonoBehaviour
         float lateralMoveInput = Input.GetAxis("Horizontal");
 
         //sprint speed movement
-        if(Input.GetKey(KeyCode.LeftShift) && isGrounded){
+        isSprinting = Input.GetKeyDown(KeyCode.LeftShift) && isGrounded;
+        
+        if(Input.GetKey(KeyCode.LeftShift)){
             currentSpeed = speed + sprint;
         }
         else {
             currentSpeed = speed;
         }
+        
 
         //player moves in the direction relative to the camera direction, not global forward or right directions
         Vector3 movement = transform.right * lateralMoveInput + transform.forward * forwardMoveInput;
         characterController.Move(movement * currentSpeed * Time.deltaTime);
 
         //apply jump
-        if (Input.GetButton("Jump") && isGrounded){
-            velocity.y = Mathf.Sqrt(jumpForce * -2 * gravity);
-        }
+        if (Input.GetButton("Jump")){
+            if(isGrounded){
+                velocity.y = Mathf.Sqrt(jumpForce * -2 * gravity);
+            } 
 
+        }
+        
         //apply gravity to player
         velocity.y += gravity * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
@@ -81,4 +89,8 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
         
     }*/
+
+    void OnDrawGizmosSelected(){
+        Gizmos.DrawSphere(groundCheck.position, groundDistance);
+    }
 }

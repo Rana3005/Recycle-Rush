@@ -58,6 +58,9 @@ public class Inventory : MonoBehaviour
         Debug.Log("removeItem");
         items.Remove(inventoryItem);
         ItemRemoved?.Invoke(inventoryItem);
+        
+        Destroy(inventoryItem.gameObject);
+        
     }
 
     private void NewItemSelect(int selectedIndex){
@@ -69,5 +72,13 @@ public class Inventory : MonoBehaviour
         }
 
         items[selectedIndex].gameObject.SetActive(true);        
+    }
+
+    public int getItemListCount(){
+        return items.Count;
+    }
+
+    public List<InventoryItem> getList(){
+        return items;
     }
 }
