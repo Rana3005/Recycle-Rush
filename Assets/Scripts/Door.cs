@@ -17,7 +17,6 @@ public class Door : MonoBehaviour
     private bool isOpen = false;
     private float speed = 1f;
     private Vector3 slideDirection;
-    private Vector3 slideRightDirection = Vector3.right;
     private Vector3 slideLeftDirection = Vector3.left;
 
     private Vector3 startPosition;
@@ -36,7 +35,16 @@ public class Door : MonoBehaviour
             if (isOpen) {
                 StartCoroutine(SlideClose());
             }
-        } 
+        }
+        else if(slideRight){
+            slideDirection = Vector3.right;
+            if(!isOpen){
+                StartCoroutine(SlideOpen());
+            }
+            if (isOpen) {
+                StartCoroutine(SlideClose());
+            }
+        }
         else if (turnDoor){
             if(!isOpen){
                 StartCoroutine(DoorTurn(TurnAmount));

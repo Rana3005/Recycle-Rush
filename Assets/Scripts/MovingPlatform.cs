@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
+    public bool isMoving;
     [SerializeField] private WaypointPath path;
     [SerializeField] private float speed;
 
@@ -23,17 +25,20 @@ public class MovingPlatform : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        elapsedTime += Time.deltaTime;
+        if(isMoving){
+            elapsedTime += Time.deltaTime;
 
-        float elaspedPercentage = elapsedTime / timeToWaypoint;
-        elaspedPercentage = Mathf.SmoothStep(0, 1, elaspedPercentage);      //smooths movement so its slower at beginning and the end
+            float elaspedPercentage = elapsedTime / timeToWaypoint;
+            elaspedPercentage = Mathf.SmoothStep(0, 1, elaspedPercentage);      //smooths movement so its slower at beginning and the end
 
-        //changes platforms position based on distance of journey elapsed 
-        transform.position = Vector3.Lerp(previousWaypoint.position, targetWaypoint.position, elaspedPercentage);
-        transform.rotation = Quaternion.Lerp(previousWaypoint.rotation, targetWaypoint.rotation, elaspedPercentage);
+            //changes platforms position based on distance of journey elapsed 
+            transform.position = Vector3.Lerp(previousWaypoint.position, targetWaypoint.position, elaspedPercentage);
+            transform.rotation = Quaternion.Lerp(previousWaypoint.rotation, targetWaypoint.rotation, elaspedPercentage);
 
-        if (elaspedPercentage >= 1){        //platform has reached it target waypoint
-            NextWaypoint();
+            if (elaspedPercentage >= 1){        //platform has reached it target waypoint
+                NextWaypoint();
+            }
+
         }
     }
 

@@ -107,6 +107,12 @@ public class PlayerAction : MonoBehaviour
     }
 
     private void ItemSelected(InventoryItem item){
+        if(heldObject != null){
+            heldObject.GetComponent<Rigidbody>().useGravity = true;
+            heldObject = null;
+        }
+            
+
         currentItemType = item.scriptableObjectItem.item_type;
         currentItem = item;
 
