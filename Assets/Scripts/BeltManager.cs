@@ -5,5 +5,6 @@ using UnityEngine;
 public class BeltManager : MonoBehaviour
 {
     public float beltSpeed = 2f;
+    public bool isBeltOn = false;
 
 }

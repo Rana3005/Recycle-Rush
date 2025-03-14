@@ -8,6 +8,10 @@ TagManager:
   - DoorTarget
   - Battery
   - ButtonCube
+  - Metal
+  - Paper
+  - Plastic
+  - Glass
   layers:
   - Default
   - TransparentFX

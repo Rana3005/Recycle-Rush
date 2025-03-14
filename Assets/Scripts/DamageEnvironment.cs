@@ -32,7 +32,9 @@ public class DamageEnvironment : MonoBehaviour
     }
 
     public void DamageOn(){
-        gameObject.GetComponent<Renderer>().material.SetColor("_Color", damageOnColour.color);
+        if(gameObject.layer != 4){
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", damageOnColour.color);
+        }
         isDamageOn = true;
     }
 

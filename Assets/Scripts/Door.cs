@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     [SerializeField] private bool slideUp;
     [SerializeField] private bool slideRight;
     [SerializeField] private bool slideLeft;
+    [SerializeField] private bool slideForward;
     [SerializeField] private bool turnDoor;
 
     [SerializeField] float slideAmount = 0f;
@@ -17,7 +18,7 @@ public class Door : MonoBehaviour
     private bool isOpen = false;
     private float speed = 1f;
     private Vector3 slideDirection;
-    private Vector3 slideLeftDirection = Vector3.left;
+
 
     private Vector3 startPosition;
 
@@ -38,6 +39,24 @@ public class Door : MonoBehaviour
         }
         else if(slideRight){
             slideDirection = Vector3.right;
+            if(!isOpen){
+                StartCoroutine(SlideOpen());
+            }
+            if (isOpen) {
+                StartCoroutine(SlideClose());
+            }
+        }
+        else if (slideLeft){
+            slideDirection = Vector3.left;
+            if(!isOpen){
+                StartCoroutine(SlideOpen());
+            }
+            if (isOpen) {
+                StartCoroutine(SlideClose());
+            }
+        }
+        else if (slideForward){
+            slideDirection = Vector3.forward;
             if(!isOpen){
                 StartCoroutine(SlideOpen());
             }

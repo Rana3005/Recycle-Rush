@@ -35,11 +35,14 @@ public class PlayerAction : MonoBehaviour
                     if (Physics.Raycast(transform.position, transform.forward, out hit, 10.0f, layerMask)){
                         heldObject = hit.collider.gameObject;
                         heldObject.GetComponent<Rigidbody>().useGravity = false;
+                        //heldObject.GetComponent<BeltItem>().isPickedUp = true;
                     }
+                    
                 } 
                 Debug.Log("fire1");  
 
                 currentItem.gameObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+                
             }
 
             if(Input.GetButtonUp("Fire1")){
@@ -50,6 +53,7 @@ public class PlayerAction : MonoBehaviour
                     heldObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     heldObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                     heldObject.GetComponent<Rigidbody>().ResetInertiaTensor();
+                    //heldObject.GetComponent<BeltItem>().isPickedUp = false;
 
                     heldObject = null;
                 }

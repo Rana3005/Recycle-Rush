@@ -24,8 +24,7 @@ public class PlayerHealth : MonoBehaviour
         health_bar.DrawHearts();
 
         if (IsDead()){
-            Death();
-            //GameManager.Instance.UpdateGameState(GameState.death);
+            GameManager.Instance.UpdateGameState(GameState.death);
         }
     }
 
@@ -49,10 +48,5 @@ public class PlayerHealth : MonoBehaviour
         else {
             return false;
         }
-    }
-
-    void Death(){
-        GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
-        //GetComponent<PlayerControl>().enabled = false;
     }
 }

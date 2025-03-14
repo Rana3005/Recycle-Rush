@@ -15,16 +15,19 @@ public class MouseCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float mouseX = Input.GetAxis("Mouse X") *  mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        if(Cursor.lockState == CursorLockMode.Locked){
+            float mouseX = Input.GetAxis("Mouse X") *  mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        xRotate -= mouseY;
-        xRotate = Mathf.Clamp(xRotate, -90, 90);
+            xRotate -= mouseY;
+            xRotate = Mathf.Clamp(xRotate, -90, 90);
 
-        transform.localRotation = Quaternion.Euler(xRotate, 0, 0);
-        player.Rotate(Vector3.up * mouseX);
+            transform.localRotation = Quaternion.Euler(xRotate, 0, 0);
+            player.Rotate(Vector3.up * mouseX);
+
+        }
         
     }
 }

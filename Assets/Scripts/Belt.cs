@@ -15,21 +15,32 @@ public class Belt : MonoBehaviour
     private BeltManager beltManager;
 
     void Start(){
+        beltManager = FindObjectOfType<BeltManager>();
+
         nextConveyorBelt = null;
         nextConveyorBelt = CheckNextBelt();
         gameObject.name = $"Belt: {beltID++}";
     }
 
     void Update(){
-        //finds next belt if next belt is empty
-        if(nextConveyorBelt == null){
-            nextConveyorBelt = CheckNextBelt();
-        }
+        if(beltManager.isBeltOn){
+           //finds next belt if next belt is empty
+            if(nextConveyorBelt == null){
+                nextConveyorBelt = CheckNextBelt();
+            }
 
-        if(beltItem != null && beltItem.item != null){
-            //item is in belt and starts coroutine
-            StartCoroutine(StartItemBeltMove());
+            /*
+            if(beltItem != null && beltItem.item != null && !beltItem.isPickedUp){
+                //item is in belt and starts coroutine
+                StartCoroutine(StartItemBeltMove());
+            } */
+
+            if(beltItem != null && beltItem.item != null){
+                //item is in belt and starts coroutine
+                StartCoroutine(StartItemBeltMove());
+            }
         }
+        
     }
 
     public Vector3 GetItemPos(){
@@ -43,8 +54,11 @@ public class Belt : MonoBehaviour
     }
 
     public IEnumerator StartItemBeltMove(){
+
+        //Debug.Log("Moving item");
         //visually moves item to another belt
         isSpaceUsed = true;         //set to true as belt currenlty has item
+        Rigidbody liftabeItem = beltItem.gameObject.GetComponent<Rigidbody>();
 
         //check if item and next belt in sequence is not null and space is not taken
         if(beltItem.item != null && nextConveyorBelt != null && nextConveyorBelt.isSpaceUsed == false){
@@ -53,6 +67,8 @@ public class Belt : MonoBehaviour
 
             //set the next belt position item as taken
             nextConveyorBelt.isSpaceUsed = true;
+
+            if (liftabeItem != null) liftabeItem.useGravity = false;
 
             //variable for smooth movement
             var step = beltManager.beltSpeed * Time.deltaTime;
@@ -81,7 +97,7 @@ public class Belt : MonoBehaviour
 
         Ray ray = new Ray(currentBeltTransform.position, forward);
 
-        if(Physics.Raycast(ray, out hit, 1f)){
+        if(Physics.Raycast(ray, out hit, 2f)){
             Belt belt = hit.collider.GetComponent<Belt>();
 
             //returns belt component if there is a belt object;
@@ -92,4 +108,5 @@ public class Belt : MonoBehaviour
 
         return null;        //if no belt found return null
     }
+
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using DigitalRuby.LightningBolt;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class ItemObstacleCheck : MonoBehaviour
@@ -9,6 +8,7 @@ public class ItemObstacleCheck : MonoBehaviour
     public bool isDoor;
     public bool isFence;
     public bool isMovingPlatform;
+    public bool isConveyorBelt;
     public GameObject checkObject;
     public GameObject linkedObstacle; 
     private LightningBoltScript[] lightnings;
@@ -36,6 +36,11 @@ public class ItemObstacleCheck : MonoBehaviour
                 linkedObstacle.GetComponent<MovingPlatform>().isMoving = true;
             }
         }
+        else if (isConveyorBelt){
+            if(hitObject.CompareTag(checkObject.tag)){
+                linkedObstacle.GetComponent<BeltManager>().isBeltOn = true;
+            }
+        }
     }
 
     private void OnTriggerExit(Collider hitObject){
@@ -58,6 +63,11 @@ public class ItemObstacleCheck : MonoBehaviour
         else if(isMovingPlatform){
             if(hitObject.CompareTag(checkObject.tag)){
                 linkedObstacle.GetComponent<MovingPlatform>().isMoving = false;
+            }
+        }
+        else if (isConveyorBelt){
+            if(hitObject.CompareTag(checkObject.tag)){
+                linkedObstacle.GetComponent<BeltManager>().isBeltOn = false;
             }
         }
 
